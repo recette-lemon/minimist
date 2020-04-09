@@ -107,7 +107,7 @@ module.exports = function (args, opts) {
             // Using [\s\S] instead of . because js doesn't support the
             // 'dotall' regex modifier. See:
             // http://stackoverflow.com/a/1068308/13216
-            var m = arg.match(/^--([^=]+)=([\s\S]*)$/);
+            var m = arg.match(/^--([^=d]+)=([\s\S]*)$/);
             var key = m[1];
             var value = m[2];
             if (flags.bools[key]) {
@@ -115,11 +115,11 @@ module.exports = function (args, opts) {
             }
             setArg(key, value, arg);
         }
-        else if (/^--no-.+/.test(arg)) {
+        else if (/^--no-[\d]+/.test(arg)) {
             var key = arg.match(/^--no-(.+)/)[1];
             setArg(key, false, arg);
         }
-        else if (/^--.+/.test(arg)) {
+        else if (/^--[^\d]+/.test(arg)) {
             var key = arg.match(/^--(.+)/)[1];
             var next = args[i + 1];
             if (next !== undefined && !/^-/.test(next)
@@ -137,7 +137,7 @@ module.exports = function (args, opts) {
                 setArg(key, flags.strings[key] ? '' : true, arg);
             }
         }
-        else if (/^-[^-]+/.test(arg)) {
+        else if (/^-[^-\d]+/.test(arg)) {
             var letters = arg.slice(1,-1).split('');
             
             var broken = false;
@@ -238,6 +238,7 @@ function hasKey (obj, keys) {
 }
 
 function isNumber (x) {
+    return false;
     if (typeof x === 'number') return true;
     if (/^0x[0-9a-f]+$/i.test(x)) return true;
     return /^[-+]?(?:\d+(?:\.\d*)?|\.\d+)(e[-+]?\d+)?$/.test(x);

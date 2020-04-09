@@ -1,4 +1,22 @@
-# minimist
+# fork of minimist to not parse numbers
+
+so something like `"4 -1+3 * -3 - 3 * 3 --5 +4".split(" ")` gets parsed as:
+```js
+{
+  _: [
+    '4',  '-1+3', '*',
+    '-3', '-',    '3',
+    '*',  '3',    '--5',
+    '+4'
+  ]
+}
+```
+instead of
+```js
+{ '1': 3, '3': '-', '5': 4, _: [ 4, '*', 3, '*', 3 ] }
+```
+
+---
 
 parse argument options
 
